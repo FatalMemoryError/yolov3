@@ -92,7 +92,7 @@ class Yolo_head(nn.Module):
     def __init__(self, in_num):
         super().__init__()
         self.CBL = Conv_BN_Leaky(in_num, in_num*2, k_size=3, stride=1, pad=1)
-        self.conv1 = nn.Conv2d(in_num*2, 255, kernel_size=1, stride=1, pad=0)
+        self.conv1 = nn.Conv2d(in_num*2, 255, kernel_size=1, stride=1, padding=0)
     
     def forward(self, x):
         x = self.CBL(x)
