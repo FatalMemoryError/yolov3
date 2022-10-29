@@ -99,7 +99,6 @@ class Yolo_head(nn.Module):
         x = self.conv1(x)
         return x
 
-
 class Yolov3(nn.Module):
     def __init__(self):
         super().__init__()
@@ -114,7 +113,7 @@ class Yolov3(nn.Module):
                                          ('CBL5_2', CBL_5(768)),
                                          ('Yolo_head_2', Yolo_head(768//2))
                                         ]))
-        self.last_layer3_cbl = Conv_BN_Leaky(256, 128, k_size=1, stride=1, pad=0)
+        self.last_layer3_cbl = Conv_BN_Leaky(384, 128, k_size=1, stride=1, pad=0)
         self.last_layer3_upsample = nn.Upsample(scale_factor=2, mode='nearest')
         self.last_layer3 = nn.Sequential(OrderedDict([
                                          ('CBL5_3', CBL_5(384)),
@@ -130,7 +129,7 @@ class Yolov3(nn.Module):
         layer2_in = self.last_layer2_upsample(layer2_in)
         layer2_in = torch.concat([layer2_in, x4], 1)
         layer2_branch = self.last_layer2[0](layer2_in)
-        layer2_out = self.last_layer2(layer2_branch)
+        layer2_out = self.last_layer2[1](layer2_branch)
         
         layer3_in = self.last_layer3_cbl(layer2_branch)
         layer3_in = self.last_layer3_upsample(layer3_in)
